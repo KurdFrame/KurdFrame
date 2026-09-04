@@ -113,7 +113,7 @@ const allMediaItems = [
 let currentUserData = null;
 let currentActiveItem = null;
 let isLoggingIn = false;
-let tempRegName = ""; // بۆ هەڵگرتنی ناو لە هەنگاوی یەکەم
+let tempRegName = "";
 
 function initApp() { 
     switchPage('home'); 
@@ -180,13 +180,24 @@ function openMediaItem(id) {
     checkFavoriteStatus();
 }
 
+function showLoginView() {
+    document.getElementById('authSelectionView').style.display = 'none';
+    document.getElementById('loginView').style.display = 'block';
+    document.getElementById('registerView').style.display = 'none';
+}
+
+function showRegisterView() {
+    document.getElementById('authSelectionView').style.display = 'none';
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('registerView').style.display = 'block';
+}
+
 function backToAuthSelection() {
     document.getElementById('authSelectionView').style.display = 'block';
     document.getElementById('loginView').style.display = 'none';
     document.getElementById('registerView').style.display = 'none';
 }
 
-// چوونەژوورەوە
 function handleLoginGoogle() {
     if (isLoggingIn) return;
     isLoggingIn = true;
@@ -213,7 +224,6 @@ function handleLoginGoogle() {
     });
 }
 
-// دروستکردنی ئەکاونت (مەرجی پشکنینی بوونی ئەکاونت)
 function handleRegisterGoogle() {
     if (isLoggingIn) return;
     isLoggingIn = true;
@@ -226,16 +236,17 @@ function handleRegisterGoogle() {
         const docSnap = await userDocRef.get();
 
         if (docSnap.exists) {
-            // ئەگەر پێشتر هەیبوو، نایەڵێت دووبارە دروست بکات، بەڵکو دەچێتە ژوورەوە
             currentUserData = docSnap.data();
             updateProfileUI(user, currentUserData);
             alert("ئەم ئەکاونتە پێشتر هەیە! ڕاستەوخۆ چوویە ژوورەوە.");
         } else {
             window.tempGoogleUser = user;
-            // دەستپێکردن بە هەنگاوی یەکەم (داواکردنی ناو)
-            document.getElementById('regStep1').style.display = 'block';
-            document.getElementById('regStep2').style.display = 'none';
-            document.getElementById('registerModal').style.display = 'flex';
+            const step1 = document.getElementById('regStep1');
+            const step2 = document.getElementById('regStep2');
+            const modal = document.getElementById('registerModal');
+            if(step1) step1.style.display = 'block';
+            if(step2) step2.style.display = 'none';
+            if(modal) modal.style.display = 'flex';
         }
     }).catch((error) => {
         isLoggingIn = false;
@@ -244,7 +255,6 @@ function handleRegisterGoogle() {
     });
 }
 
-// فەنکشنی تێپەڕین لە هەنگاوی یەکەم بۆ دووەم (ناو بۆ بەروار)
 function proceedToStep2() {
     const nameInput = document.getElementById('regNameInput').value.trim();
     if (!nameInput) {
@@ -252,13 +262,15 @@ function proceedToStep2() {
         return;
     }
     tempRegName = nameInput;
-    document.getElementById('regStep1').style.display = 'none';
-    document.getElementById('regStep2').style.display = 'block';
+    const step1 = document.getElementById('regStep1');
+    const step2 = document.getElementById('regStep2');
+    if(step1) step1.style.display = 'none';
+    if(step2) step2.style.display = 'block';
 }
 
-// کۆتاییهاتنی دروستکردن و پاشەکەوتکردن لە فایەربەیس
 function saveNewUserRegistration() {
-    const birthDate = document.getElementById('regBirthDateInput').value;
+    const birthDateInput = document.getElementById('regBirthDateInput');
+    const birthDate = birthDateInput ? birthDateInput.value : '';
     if (!birthDate) {
         alert("تکایە بەرواری لەدایکبوونت دیاری بکە!");
         return;
@@ -276,7 +288,8 @@ function saveNewUserRegistration() {
 
     db.collection('users').doc(user.uid).set(userData).then(() => {
         currentUserData = userData;
-        document.getElementById('registerModal').style.display = 'none';
+        const modal = document.getElementById('registerModal');
+        if(modal) modal.style.display = 'none';
         updateProfileUI(user, userData);
         alert("ئەکاونتەکەت بە سەرکەوتوویی دروستکرا!");
     }).catch(error => {
@@ -285,27 +298,39 @@ function saveNewUserRegistration() {
 }
 
 function updateProfileUI(user, data) {
-    document.getElementById('authSelectionView').style.display = 'none';
-    document.getElementById('loginView').style.display = 'none';
-    document.getElementById('registerView').style.display = 'none';
-    document.getElementById('loggedInView').style.display = 'block';
+    const authSel = document.getElementById('authSelectionView');
+    const loginV = document.getElementById('loginView');
+    const regV = document.getElementById('registerView');
+    const loggedV = document.getElementById('loggedInView');
 
-    // نیشاندانی لۆگۆ/وێنەی جیمێڵ، ناو، بەروار و ئیمەیڵ
-    document.getElementById('userProfileImg').src = data.photoURL || user.photoURL;
-    document.getElementById('userProfileName').innerText = data.name;
-    document.getElementById('userProfileEmail').innerText = "ئیمەیڵ: " + data.email;
-    document.getElementById('userProfileAge').innerText = "بەرواری لەدایکبوون: " + data.birthDate;
+    if(authSel) authSel.style.display = 'none';
+    if(loginV) loginV.style.display = 'none';
+    if(regV) regV.style.display = 'none';
+    if(loggedV) loggedV.style.display = 'block';
+
+    const pImg = document.getElementById('userProfileImg');
+    const pName = document.getElementById('userProfileName');
+    const pEmail = document.getElementById('userProfileEmail');
+    const pAge = document.getElementById('userProfileAge');
+
+    if(pImg) pImg.src = data.photoURL || user.photoURL || '';
+    if(pName) pName.innerText = data.name || '';
+    if(pEmail) pEmail.innerText = "ئیمەیڵ: " + (data.email || user.email);
+    if(pAge) pAge.innerText = "بەرواری لەدایکبوون: " + (data.birthDate || '');
 
     renderFavoritesList();
 }
 
 function resetProfileUI() {
-    document.getElementById('authSelectionView').style.display = 'block';
-    document.getElementById('loggedInView').style.display = 'none';
+    const authSel = document.getElementById('authSelectionView');
+    const loggedV = document.getElementById('loggedInView');
+    if(authSel) authSel.style.display = 'block';
+    if(loggedV) loggedV.style.display = 'none';
 }
 
 function renderFavoritesList() {
     const favContainer = document.getElementById('userFavoritesList');
+    if(!favContainer) return;
     favContainer.innerHTML = '';
 
     if (!currentUserData || !currentUserData.favorites || currentUserData.favorites.length === 0) {
@@ -363,10 +388,10 @@ function checkFavoriteStatus() {
     const isFav = currentUserData.favorites.includes(currentActiveItem.id);
     const lang = document.getElementById('htmlRoot').getAttribute('lang') || 'ku';
     const t = translations[lang];
-    document.getElementById('favoriteBtnText').innerText = isFav ? t.removeFromFav : t.addToFav;
+    const btnText = document.getElementById('favoriteBtnText');
+    if(btnText) btnText.innerText = isFav ? t.removeFromFav : t.addToFav;
 }
 
-// دوگمەی لۆگ ئاوت لە خواری خوارەوەی پڕۆفایل
 function googleLogout() {
     firebase.auth().signOut().then(() => {
         alert("بە سەرکەوتوویی چوویە دەرەوە.");
@@ -374,9 +399,59 @@ function googleLogout() {
     });
 }
 
+function toggleMenu() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    if(!sidebar || !overlay) return;
+    if (sidebar.style.right === '0px') {
+        sidebar.style.right = '-280px';
+        overlay.style.display = 'none';
+    } else {
+        sidebar.style.right = '0px';
+        overlay.style.display = 'block';
+    }
+}
+
+function toggleSearchBox() {
+    const searchBox = document.getElementById('searchExpandBox');
+    if(searchBox) searchBox.classList.toggle('active');
+}
+
 function switchPage(pageId) {
     document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
-    document.getElementById(pageId).classList.add('active-page');
+    const targetPage = document.getElementById(pageId);
+    if(targetPage) targetPage.classList.add('active-page');
+
+    const topNavBar = document.getElementById('topNavBar');
+    const btnHome = document.getElementById('btnHome');
+    const btnMovies = document.getElementById('btnMovies');
+    const btnSeries = document.getElementById('btnSeries');
+    const btnAnime = document.getElementById('btnAnime');
+    const headerSearchBtn = document.getElementById('headerSearchBtn');
+
+    if(topNavBar && btnHome && btnMovies && btnSeries && btnAnime && headerSearchBtn) {
+        topNavBar.classList.remove('active-nav');
+        btnHome.classList.remove('show-btn');
+        btnMovies.classList.remove('show-btn');
+        btnSeries.classList.remove('show-btn');
+        btnAnime.classList.remove('show-btn');
+
+        if (['home', 'movies', 'series', 'anime'].includes(pageId)) {
+            headerSearchBtn.style.display = 'flex';
+            topNavBar.classList.add('active-nav');
+            btnHome.classList.add('show-btn');
+            btnMovies.classList.add('show-btn');
+            btnSeries.classList.add('show-btn');
+            btnAnime.classList.add('show-btn');
+        } else {
+            headerSearchBtn.style.display = 'none';
+            const searchBox = document.getElementById('searchExpandBox');
+            if(searchBox) searchBox.classList.remove('active');
+        }
+    }
+
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar && sidebar.style.right === '0px') toggleMenu();
     window.scrollTo(0, 0);
 }
 
@@ -389,17 +464,25 @@ function openDetail(title, poster, rating, budget, revenue, year, director, desc
     document.getElementById('detYear').innerText = year;
     document.getElementById('detDirector').innerText = director;
     document.getElementById('detDesc').innerText = desc;
-    document.getElementById('seriesSeasonsBox').style.display = 'none';
+    const seasonsBox = document.getElementById('seriesSeasonsBox');
+    if(seasonsBox) seasonsBox.style.display = 'none';
     switchPage('detailView');
 }
 
 function openSeriesDetail(title, poster, rating, budget, revenue, year, director, desc) {
     openDetail(title, poster, rating, budget, revenue, year, director, desc);
-    document.getElementById('seriesSeasonsBox').style.display = 'block';
+    const seasonsBox = document.getElementById('seriesSeasonsBox');
+    if(seasonsBox) seasonsBox.style.display = 'block';
+}
+
+function clearAppCache() {
+    const currentLang = document.getElementById('htmlRoot').getAttribute('lang') || 'ku';
+    alert(translations[currentLang].cacheClearedAlert);
 }
 
 function changeLanguage(lang) {
     const htmlRoot = document.getElementById('htmlRoot');
+    if(!htmlRoot) return;
     htmlRoot.setAttribute('lang', lang);
     htmlRoot.setAttribute('dir', lang === 'en' ? 'ltr' : 'rtl');
     const texts = translations[lang] || translations.ku;
@@ -407,6 +490,9 @@ function changeLanguage(lang) {
         const key = el.getAttribute('data-i18n');
         if (texts[key]) el.innerText = texts[key];
     });
+    const searchInput = document.getElementById('searchInput');
+    if(searchInput) searchInput.placeholder = texts.searchPlaceholder;
+    checkFavoriteStatus();
 }
 
 function toggleDarkMode(checkbox) {
