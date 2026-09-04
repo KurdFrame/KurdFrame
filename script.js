@@ -14,7 +14,6 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// زمانەکان
 const translations = {
     ku: {
         home: "سەرەکی", movies: "فلیمەکان", series: "زنجیرەکان", anime: "ئەنیمی",
@@ -39,9 +38,11 @@ const translations = {
         clearCacheLabel: "پاککردنەوەی خەزنەی کاتی (Clear Cache):", clearBtn: "پاککردنەوە",
         cacheClearedAlert: "خەزنەی کاتی بە سەرکەوتوویی پاککرایەوە!",
         footerRights: "هەموو مافێک پارێزراوە بۆ ماڵپەڕی KurdFrame © ٢٠٢٦",
-        favoritesTitle: "فیلم و زنجیرە دڵخوازەکان:", logoutBtn: "چوونەدەرەوە (Log out)",
-        completeProfileTitle: "تکایە زانیارییەکانت تەواو بکە", completeProfileDesc: "چونکە ئەمە یەکەمجارەتە، پێویستە ناو و تەمەنت تۆمار بکەیت:",
-        saveBtn: "تۆمارکردن", addToFav: "زیادکردن بۆ دڵخوازەکان", removeFromFav: "لابردن لە دڵخوازەکان"
+        favoritesTitle: "فیلم، زنجیرە و ئەنیمییە دڵخوازەکان:", logoutBtn: "چوونەدەرەوە (Log out)",
+        completeProfileTitle: "تکایە زانیارییەکانت تەواو بکە", 
+        step1Desc: "هەنگاوی ١ لە ٢: ناوی خۆت بنووسە",
+        step2Desc: "هەنگاوی ٢ لە ٢: بەرواری لەدایکبوونت بنووسە",
+        nextBtn: "دواتر", saveBtn: "تۆمارکردن", addToFav: "زیادکردن بۆ دڵخوازەکان", removeFromFav: "لابردن لە دڵخوازەکان"
     },
     ar: {
         home: "الرئيسية", movies: "الأفلام", series: "المسلسلات", anime: "أنيمي",
@@ -66,9 +67,11 @@ const translations = {
         clearCacheLabel: "مسح ذاكرة التخزين المؤقت (Clear Cache):", clearBtn: "مسح",
         cacheClearedAlert: "تم مسح ذاكرة التخزين المؤقت بنجاح!",
         footerRights: "جميع الحقوق محفوظة لموقع KurdFrame © ٢٠٢٦",
-        favoritesTitle: "الأفلام والمسلسلات المفضلة:", logoutBtn: "تسجيل الخروج (Log out)",
-        completeProfileTitle: "يرجى إكمال معلوماتك", completeProfileDesc: "نظرًا لأن هذه هي زيارتك الأولى، يرجى إدخال الاسم والعمر:",
-        saveBtn: "حفظ", addToFav: "إضافة إلى المفضلة", removeFromFav: "إزالة من المفضلة"
+        favoritesTitle: "الأفلام، المسلسلات والأنيمي المفضلة:", logoutBtn: "تسجيل الخروج (Log out)",
+        completeProfileTitle: "يرجى إكمال معلوماتك", 
+        step1Desc: "الخطوة 1 من 2: أدخل اسمك",
+        step2Desc: "الخطوة 2 من 2: أدخل تاريخ ميلادك",
+        nextBtn: "التالي", saveBtn: "حفظ", addToFav: "إضافة إلى المفضلة", removeFromFav: "إزالة من المفضلة"
     },
     en: {
         home: "Home", movies: "Movies", series: "Series", anime: "Anime",
@@ -93,22 +96,24 @@ const translations = {
         clearCacheLabel: "Clear Cache:", clearBtn: "Clear",
         cacheClearedAlert: "Cache cleared successfully!",
         footerRights: "All rights reserved to KurdFrame © 2026",
-        favoritesTitle: "Favorite Movies & Series:", logoutBtn: "Log out",
-        completeProfileTitle: "Complete Your Profile", completeProfileDesc: "Since this is your first time, please enter your name and age:",
-        saveBtn: "Save", addToFav: "Add to Favorites", removeFromFav: "Remove from Favorites"
+        favoritesTitle: "Favorite Movies, Series & Anime:", logoutBtn: "Log out",
+        completeProfileTitle: "Complete Your Profile", 
+        step1Desc: "Step 1 of 2: Enter your name",
+        step2Desc: "Step 2 of 2: Enter your birthdate",
+        nextBtn: "Next", saveBtn: "Save", addToFav: "Add to Favorites", removeFromFav: "Remove from Favorites"
     }
 };
 
 const allMediaItems = [
-    { id: 'm1', title: 'نیشانەی ئازایەتی', poster: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80', rating: '8.4', budget: '150 ملیۆن دۆلار', revenue: '420 ملیۆن دۆلار', year: '٢٠٢٦', director: 'کریستۆفەر نۆلان', desc: 'ئەم فیلمە پڕ لە چێژ و سەرکێشی باس لە سەردەمی داهاتوو و جەنگە جیهانییەکان دەکات...', type: 'movie' },
-    { id: 'm2', title: 'جیهانی ونبوو', poster: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=500&q=80', rating: '8.1', budget: '120 ملیۆن دۆلار', revenue: '380 ملیۆن دۆلار', year: '٢٠٢٥', director: 'جەیمس کامیرۆن', desc: 'گەشتێکی خەیاڵی پڕ لە نهێنی بۆ قووڵایی زەوی...', type: 'movie' },
-    { id: 's1', title: 'کۆتا کادر', poster: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80', rating: '8.8', budget: '50 ملیۆن دۆلار', revenue: '180 ملیۆن دۆلار', year: '٢٠٢٦', director: 'ڤینس گیلیگان', desc: 'زنجیرەیەکی تەلەڤزیۆنی سەرنجڕاکێش دەربارەی جیهانی تاوان...', type: 'series' },
-    { id: 'a1', title: 'هێرشی تایتانەکان', poster: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=500&q=80', rating: '9.1', budget: '40 ملیۆن دۆلار', revenue: '200 ملیۆن دۆلار', year: '٢٠٢٣', director: 'هاتسورو ئاراگی', desc: 'چیرۆکی جیهانێک کە تێیدا مرۆڤەکان لەژێر هەڕەشەی بوونەوەرە زەبەلاحەکاندا دەژین...', type: 'anime' }
+    { id: 'm1', title: 'نیشانەی ئازایەتی', poster: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80', rating: '8.4', budget: '150 ملیۆن دۆلار', revenue: '420 ملیۆن دۆلار', year: '٢٠٢٦', director: 'کریستۆفەر نۆلان', desc: 'ئەم فیلمە پڕ لە چێژ و سەرکێشی...', type: 'movie' },
+    { id: 's1', title: 'کۆتا کادر', poster: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80', rating: '8.8', budget: '50 ملیۆن دۆلار', revenue: '180 ملیۆن دۆلار', year: '٢٠٢٦', director: 'ڤینس گیلیگان', desc: 'زنجیرەیەکی تەلەڤزیۆنی...', type: 'series' },
+    { id: 'a1', title: 'هێرشی تایتانەکان', poster: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=500&q=80', rating: '9.1', budget: '40 ملیۆن دۆلار', revenue: '200 ملیۆن دۆلار', year: '٢٠٢٣', director: 'هاتسورو ئاراگی', desc: 'چیرۆکی جیهانێک...', type: 'anime' }
 ];
 
 let currentUserData = null;
 let currentActiveItem = null;
 let isLoggingIn = false;
+let tempRegName = ""; // بۆ هەڵگرتنی ناو لە هەنگاوی یەکەم
 
 function initApp() { 
     switchPage('home'); 
@@ -124,7 +129,7 @@ function initApp() {
                     updateProfileUI(user, currentUserData);
                 }
             } catch (e) {
-                console.log("Offline mode or sync issue");
+                console.log("Offline mode");
             }
         } else {
             currentUserData = null;
@@ -157,14 +162,9 @@ function renderMediaGrids() {
                 </div>
             </div>
         `;
-        if(item.type === 'movie') {
-            homeGrid.innerHTML += cardHTML;
-            moviesGrid.innerHTML += cardHTML;
-        } else if(item.type === 'series') {
-            seriesGrid.innerHTML += cardHTML;
-        } else if(item.type === 'anime') {
-            animeGrid.innerHTML += cardHTML;
-        }
+        if(item.type === 'movie') { homeGrid.innerHTML += cardHTML; moviesGrid.innerHTML += cardHTML; }
+        else if(item.type === 'series') { seriesGrid.innerHTML += cardHTML; }
+        else if(item.type === 'anime') { animeGrid.innerHTML += cardHTML; }
     });
 }
 
@@ -172,7 +172,6 @@ function openMediaItem(id) {
     const item = allMediaItems.find(x => x.id === id);
     if (!item) return;
     currentActiveItem = item;
-
     if (item.type === 'movie') {
         openDetail(item.title, item.poster, item.rating, item.budget, item.revenue, item.year, item.director, item.desc);
     } else {
@@ -181,108 +180,87 @@ function openMediaItem(id) {
     checkFavoriteStatus();
 }
 
-function showLoginView() {
-    document.getElementById('authSelectionView').style.display = 'none';
-    document.getElementById('loginView').style.display = 'block';
-    document.getElementById('registerView').style.display = 'none';
-}
-
-function showRegisterView() {
-    document.getElementById('authSelectionView').style.display = 'none';
-    document.getElementById('loginView').style.display = 'none';
-    document.getElementById('registerView').style.display = 'block';
-}
-
 function backToAuthSelection() {
     document.getElementById('authSelectionView').style.display = 'block';
     document.getElementById('loginView').style.display = 'none';
     document.getElementById('registerView').style.display = 'none';
 }
 
-// چوونەژوورەوەی گووگڵ بە پاراستن لە کێشەی پۆپ-ئەپ و ئۆفلاین
+// چوونەژوورەوە
 function handleLoginGoogle() {
     if (isLoggingIn) return;
     isLoggingIn = true;
-
     const provider = new firebase.auth.GoogleAuthProvider();
     
     firebase.auth().signInWithPopup(provider).then(async (result) => {
         isLoggingIn = false;
         const user = result.user;
         const userDocRef = db.collection('users').doc(user.uid);
-        
-        try {
-            let docSnap;
-            try {
-                docSnap = await userDocRef.get({ source: 'server' });
-            } catch (e) {
-                docSnap = await userDocRef.get({ source: 'cache' });
-            }
+        const docSnap = await userDocRef.get();
 
-            if (!docSnap.exists) {
-                await firebase.auth().signOut();
-                alert("ئەم ئەکاونتە بوونی نییە! تکایە سەرەتا لە بەشی دروستکردنی ئەکاونتی نوێ تۆمار بکە.");
-                backToAuthSelection();
-            } else {
-                currentUserData = docSnap.data();
-                updateProfileUI(user, currentUserData);
-            }
-        } catch (error) {
-            alert("کێشە لە پەیوەندیکردن بە سێرڤەرەوە هەیە.");
+        if (!docSnap.exists) {
             await firebase.auth().signOut();
+            alert("ئەم ئەکاونتە بوونی نییە! تکایە لە بەشی دروستکردنی ئەکاونت تۆمار بکە.");
             backToAuthSelection();
+        } else {
+            currentUserData = docSnap.data();
+            updateProfileUI(user, currentUserData);
         }
     }).catch((error) => {
         isLoggingIn = false;
-        if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
-            return;
-        }
-        alert("هەڵە لە چوونەژوورەوە: " + error.message);
+        if (error.code === 'auth/cancelled-popup-request') return;
+        alert("هەڵە: " + error.message);
     });
 }
 
-// تۆمارکردنی ئەکاونتی نوێ بە گووگڵ
+// دروستکردنی ئەکاونت (مەرجی پشکنینی بوونی ئەکاونت)
 function handleRegisterGoogle() {
     if (isLoggingIn) return;
     isLoggingIn = true;
-
     const provider = new firebase.auth.GoogleAuthProvider();
     
     firebase.auth().signInWithPopup(provider).then(async (result) => {
         isLoggingIn = false;
         const user = result.user;
         const userDocRef = db.collection('users').doc(user.uid);
-        
-        try {
-            let docSnap = await userDocRef.get();
+        const docSnap = await userDocRef.get();
 
-            if (docSnap.exists) {
-                currentUserData = docSnap.data();
-                updateProfileUI(user, currentUserData);
-                alert("ئەم ئەکاونتە پێشتر هەبوو، ڕاستەوخۆ چوویە ژوورەوە!");
-            } else {
-                window.tempGoogleUser = user;
-                document.getElementById('registerModal').style.display = 'flex';
-            }
-        } catch (error) {
+        if (docSnap.exists) {
+            // ئەگەر پێشتر هەیبوو، نایەڵێت دووبارە دروست بکات، بەڵکو دەچێتە ژوورەوە
+            currentUserData = docSnap.data();
+            updateProfileUI(user, currentUserData);
+            alert("ئەم ئەکاونتە پێشتر هەیە! ڕاستەوخۆ چوویە ژوورەوە.");
+        } else {
             window.tempGoogleUser = user;
+            // دەستپێکردن بە هەنگاوی یەکەم (داواکردنی ناو)
+            document.getElementById('regStep1').style.display = 'block';
+            document.getElementById('regStep2').style.display = 'none';
             document.getElementById('registerModal').style.display = 'flex';
         }
     }).catch((error) => {
         isLoggingIn = false;
-        if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
-            return;
-        }
-        alert("هەڵە لە دروستکردنی ئەکاونت: " + error.message);
+        if (error.code === 'auth/cancelled-popup-request') return;
+        alert("هەڵە: " + error.message);
     });
 }
 
-function saveNewUserRegistration() {
-    const name = document.getElementById('regNameInput').value.trim();
-    const age = document.getElementById('regAgeInput').value.trim();
+// فەنکشنی تێپەڕین لە هەنگاوی یەکەم بۆ دووەم (ناو بۆ بەروار)
+function proceedToStep2() {
+    const nameInput = document.getElementById('regNameInput').value.trim();
+    if (!nameInput) {
+        alert("تکایە ناوی خۆت بنووسە!");
+        return;
+    }
+    tempRegName = nameInput;
+    document.getElementById('regStep1').style.display = 'none';
+    document.getElementById('regStep2').style.display = 'block';
+}
 
-    if (!name || !age) {
-        alert("تکایە ناو و تەمەن بە تەواوی بنووسە!");
+// کۆتاییهاتنی دروستکردن و پاشەکەوتکردن لە فایەربەیس
+function saveNewUserRegistration() {
+    const birthDate = document.getElementById('regBirthDateInput').value;
+    if (!birthDate) {
+        alert("تکایە بەرواری لەدایکبوونت دیاری بکە!");
         return;
     }
 
@@ -290,9 +268,9 @@ function saveNewUserRegistration() {
     const userData = {
         uid: user.uid,
         email: user.email,
-        photoURL: user.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
-        name: name,
-        age: age,
+        photoURL: user.photoURL || '',
+        name: tempRegName,
+        birthDate: birthDate,
         favorites: []
     };
 
@@ -312,18 +290,17 @@ function updateProfileUI(user, data) {
     document.getElementById('registerView').style.display = 'none';
     document.getElementById('loggedInView').style.display = 'block';
 
+    // نیشاندانی لۆگۆ/وێنەی جیمێڵ، ناو، بەروار و ئیمەیڵ
     document.getElementById('userProfileImg').src = data.photoURL || user.photoURL;
     document.getElementById('userProfileName').innerText = data.name;
-    document.getElementById('userProfileEmail').innerText = data.email;
-    document.getElementById('userProfileAge').innerText = "تەمەن: " + data.age;
+    document.getElementById('userProfileEmail').innerText = "ئیمەیڵ: " + data.email;
+    document.getElementById('userProfileAge').innerText = "بەرواری لەدایکبوون: " + data.birthDate;
 
     renderFavoritesList();
 }
 
 function resetProfileUI() {
     document.getElementById('authSelectionView').style.display = 'block';
-    document.getElementById('loginView').style.display = 'none';
-    document.getElementById('registerView').style.display = 'none';
     document.getElementById('loggedInView').style.display = 'none';
 }
 
@@ -332,7 +309,7 @@ function renderFavoritesList() {
     favContainer.innerHTML = '';
 
     if (!currentUserData || !currentUserData.favorites || currentUserData.favorites.length === 0) {
-        favContainer.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">هیچ فیلم یان زنجیرەیەک لە دڵخوازەکانتدا نییە.</p>';
+        favContainer.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">هیچ فیلم، زنجیرە یان ئەنیمییەک لە دڵخوازەکانتدا نییە.</p>';
         return;
     }
 
@@ -340,8 +317,8 @@ function renderFavoritesList() {
         const item = allMediaItems.find(x => x.id === favId);
         if (item) {
             favContainer.innerHTML += `
-                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-dark); padding:8px 12px; border-radius:6px;">
-                    <span style="font-size:14px; cursor:pointer; color:var(--text-color);" onclick='openMediaItem("${item.id}")'>${item.title}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-dark); padding:8px 12px; border-radius:6px; margin-bottom:5px;">
+                    <span style="font-size:14px; cursor:pointer; color:var(--text-color);" onclick='openMediaItem("${item.id}")'>${item.title} (${item.type})</span>
                     <button onclick='removeFromFavorites("${item.id}")' style="background:none; border:none; color:red; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `;
@@ -351,20 +328,16 @@ function renderFavoritesList() {
 
 function toggleFavoriteCurrent() {
     if (!firebase.auth().currentUser) {
-        alert("تکایە سەرەتا چوونەژوورەوە ئەنجام بدە بۆ زیادکردن بۆ دڵخوازەکان!");
+        alert("تکایە سەرەتا چوونەژوورەوە ئەنجام بدە!");
         switchPage('profile');
         return;
     }
-
     if (!currentActiveItem) return;
     if (!currentUserData.favorites) currentUserData.favorites = [];
 
     const index = currentUserData.favorites.indexOf(currentActiveItem.id);
-    if (index > -1) {
-        currentUserData.favorites.splice(index, 1);
-    } else {
-        currentUserData.favorites.push(currentActiveItem.id);
-    }
+    if (index > -1) currentUserData.favorites.splice(index, 1);
+    else currentUserData.favorites.push(currentActiveItem.id);
 
     db.collection('users').doc(currentUserData.uid).update({
         favorites: currentUserData.favorites
@@ -386,16 +359,14 @@ function removeFromFavorites(id) {
 }
 
 function checkFavoriteStatus() {
-    if (!currentActiveItem || !currentUserData || !currentUserData.favorites) {
-        document.getElementById('favoriteBtnText').innerText = "زیادکردن بۆ دڵخوازەکان";
-        return;
-    }
+    if (!currentActiveItem || !currentUserData || !currentUserData.favorites) return;
     const isFav = currentUserData.favorites.includes(currentActiveItem.id);
     const lang = document.getElementById('htmlRoot').getAttribute('lang') || 'ku';
     const t = translations[lang];
     document.getElementById('favoriteBtnText').innerText = isFav ? t.removeFromFav : t.addToFav;
 }
 
+// دوگمەی لۆگ ئاوت لە خواری خوارەوەی پڕۆفایل
 function googleLogout() {
     firebase.auth().signOut().then(() => {
         alert("بە سەرکەوتوویی چوویە دەرەوە.");
@@ -403,52 +374,9 @@ function googleLogout() {
     });
 }
 
-function toggleMenu() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    if (sidebar.style.right === '0px') {
-        sidebar.style.right = '-280px';
-        overlay.style.display = 'none';
-    } else {
-        sidebar.style.right = '0px';
-        overlay.style.display = 'block';
-    }
-}
-
-function toggleSearchBox() {
-    document.getElementById('searchExpandBox').classList.toggle('active');
-}
-
 function switchPage(pageId) {
     document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
     document.getElementById(pageId).classList.add('active-page');
-
-    const topNavBar = document.getElementById('topNavBar');
-    const btnHome = document.getElementById('btnHome');
-    const btnMovies = document.getElementById('btnMovies');
-    const btnSeries = document.getElementById('btnSeries');
-    const btnAnime = document.getElementById('btnAnime');
-    const headerSearchBtn = document.getElementById('headerSearchBtn');
-
-    topNavBar.classList.remove('active-nav');
-    btnHome.classList.remove('show-btn');
-    btnMovies.classList.remove('show-btn');
-    btnSeries.classList.remove('show-btn');
-    btnAnime.classList.remove('show-btn');
-
-    if (['home', 'movies', 'series', 'anime'].includes(pageId)) {
-        headerSearchBtn.style.display = 'flex';
-        topNavBar.classList.add('active-nav');
-        btnHome.classList.add('show-btn');
-        btnMovies.classList.add('show-btn');
-        btnSeries.classList.add('show-btn');
-        btnAnime.classList.add('show-btn');
-    } else {
-        headerSearchBtn.style.display = 'none';
-        document.getElementById('searchExpandBox').classList.remove('active');
-    }
-
-    if (document.getElementById('sidebar').style.right === '0px') toggleMenu();
     window.scrollTo(0, 0);
 }
 
@@ -461,7 +389,6 @@ function openDetail(title, poster, rating, budget, revenue, year, director, desc
     document.getElementById('detYear').innerText = year;
     document.getElementById('detDirector').innerText = director;
     document.getElementById('detDesc').innerText = desc;
-
     document.getElementById('seriesSeasonsBox').style.display = 'none';
     switchPage('detailView');
 }
@@ -469,42 +396,6 @@ function openDetail(title, poster, rating, budget, revenue, year, director, desc
 function openSeriesDetail(title, poster, rating, budget, revenue, year, director, desc) {
     openDetail(title, poster, rating, budget, revenue, year, director, desc);
     document.getElementById('seriesSeasonsBox').style.display = 'block';
-    
-    const seasonsList = document.getElementById('seasonsList');
-    seasonsList.innerHTML = '';
-    for(let s = 1; s <= 3; s++) {
-        const btn = document.createElement('button');
-        btn.className = 'season-chip' + (s === 1 ? ' active' : '');
-        btn.innerText = (document.getElementById('htmlRoot').getAttribute('lang') === 'en' ? 'Season ' : 'وەرز ') + s;
-        btn.onclick = () => {
-            document.querySelectorAll('.season-chip').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            loadEpisodes(s);
-        };
-        seasonsList.appendChild(btn);
-    }
-    loadEpisodes(1);
-}
-
-function loadEpisodes(seasonNum) {
-    const episodesList = document.getElementById('episodesList');
-    episodesList.innerHTML = '';
-    const lang = document.getElementById('htmlRoot').getAttribute('lang') || 'ku';
-    for(let e = 1; e <= 6; e++) {
-        const eBtn = document.createElement('button');
-        eBtn.className = 'episode-chip';
-        eBtn.innerText = (lang === 'en' ? 'Episode ' : 'ئەڵقەی ') + e;
-        eBtn.onclick = () => {
-            document.querySelectorAll('.episode-chip').forEach(c => c.classList.remove('active'));
-            eBtn.classList.add('active');
-        };
-        episodesList.appendChild(eBtn);
-    }
-}
-
-function clearAppCache() {
-    const currentLang = document.getElementById('htmlRoot').getAttribute('lang') || 'ku';
-    alert(translations[currentLang].cacheClearedAlert);
 }
 
 function changeLanguage(lang) {
@@ -516,9 +407,6 @@ function changeLanguage(lang) {
         const key = el.getAttribute('data-i18n');
         if (texts[key]) el.innerText = texts[key];
     });
-    const searchInput = document.getElementById('searchInput');
-    if(searchInput) searchInput.placeholder = texts.searchPlaceholder;
-    checkFavoriteStatus();
 }
 
 function toggleDarkMode(checkbox) {
