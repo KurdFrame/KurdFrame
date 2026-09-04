@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کوردفریم - KurdFrame | ماڵپەڕی سینەمایی کوردی</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="initApp()">
+
+    <header>
+        <div class="logo" onclick="switchPage('home')">KurdFrame</div>
+        <div class="header-left">
+            <button class="header-search-icon" id="headerSearchBtn" onclick="toggleSearchBox()" title="گەڕان">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button class="menu-btn" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-title" data-i18n="menuTitle">لیستی سەرەکی</span>
+            <button class="close-btn" onclick="toggleMenu()">&times;</button>
+        </div>
+        <div class="sidebar-links">
+            <button onclick="switchPage('home')"><i class="fa-solid fa-house"></i> <span data-i18n="home">سەرەکی</span></button>
+            <button onclick="switchPage('notifications')"><i class="fa-solid fa-bell"></i> <span data-i18n="notificationsMenu">ئاگادارکردنەوەکان</span></button>
+            <button onclick="switchPage('profile')"><i class="fa-solid fa-user"></i> <span data-i18n="profile">پڕۆفایلی من / چوونەژوورەوە</span></button>
+            <button onclick="switchPage('developer')"><i class="fa-solid fa-code"></i> <span data-i18n="developer">دیڤلۆپەر (Developer)</span></button>
+            <button onclick="switchPage('settings')"><i class="fa-solid fa-gear"></i> <span data-i18n="settings">ڕێکخستنەکان (Settings)</span></button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="search-box-expand" id="searchExpandBox">
+            <input type="text" id="searchInput" placeholder="گەڕان بەدوای فیلم، زنجیرە یان ئەنیمی...">
+            <button data-i18n="searchBtn">گەڕان</button>
+        </div>
+
+        <div class="top-nav-bar" id="topNavBar">
+            <button class="top-nav-btn" id="btnHome" onclick="switchPage('home')">
+                <i class="fa-solid fa-house" style="color: var(--primary-color);"></i> <span data-i18n="home">سەرەکی</span>
+            </button>
+            <button class="top-nav-btn" id="btnMovies" onclick="switchPage('movies')">
+                <i class="fa-solid fa-film" style="color: var(--primary-color);"></i> <span data-i18n="movies">فلیمەکان</span>
+            </button>
+            <button class="top-nav-btn" id="btnSeries" onclick="switchPage('series')">
+                <i class="fa-solid fa-tv" style="color: var(--primary-color);"></i> <span data-i18n="series">زنجیرەکان</span>
+            </button>
+            <button class="top-nav-btn" id="btnAnime" onclick="switchPage('anime')">
+                <i class="fa-solid fa-dragon" style="color: var(--primary-color);"></i> <span data-i18n="anime">ئەنیمی</span>
+            </button>
+        </div>
+
+        <!-- بەشی سەرەکی -->
+        <div id="home" class="page-section active-page">
+            <h2 class="section-title" data-i18n="latestMovies">دوایین فیلمە بڵاوکراوەکان</h2>
+            <div class="movies-grid" id="homeMoviesGrid"></div>
+        </div>
+
+        <!-- فلیمەکان -->
+        <div id="movies" class="page-section">
+            <h2 class="section-title" data-i18n="moviesTitle">هەموو فلیمەکان</h2>
+            <div class="movies-grid" id="moviesGrid"></div>
+        </div>
+
+        <!-- زنجیرەکان -->
+        <div id="series" class="page-section">
+            <h2 class="section-title" data-i18n="seriesTitle">زنجیرە تەلەڤزیۆنییەکان</h2>
+            <div class="movies-grid" id="seriesGrid"></div>
+        </div>
+
+        <!-- ئەنیمی -->
+        <div id="anime" class="page-section">
+            <h2 class="section-title" data-i18n="animeTitle">ئەنیمییە بەناوبانگەکان</h2>
+            <div class="movies-grid" id="animeGrid"></div>
+        </div>
+
+        <!-- وردەکاری پۆستەر و زانیاری -->
+        <div id="detailView" class="page-section">
+            <button class="settings-action-btn" onclick="switchPage('home')" style="margin-bottom: 20px;"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="backBtn">گەڕانەوە</span></button>
+            
+            <div class="detail-container">
+                <div class="detail-left">
+                    <div class="detail-title" id="detTitle">ناوی فیلم</div>
+                    <p class="detail-description" id="detDesc"></p>
+                    <div class="detail-specs-grid">
+                        <p>⭐ <span data-i18n="imdbRating">رێزبەندی IMDb</span>: <span id="detRating"></span></p>
+                        <p>💰 <span data-i18n="budget">بودجە</span>: <span id="detBudget"></span></p>
+                        <p>📈 <span data-i18n="revenue">داهات</span>: <span id="detRevenue"></span></p>
+                        <p>📅 <span data-i18n="year">ساڵ</span>: <span id="detYear"></span></p>
+                        <p>🎬 <span data-i18n="director">دەرهێنەر</span>: <span id="detDirector"></span></p>
+                        <p>🌐 <span data-i18n="streamType">جۆری پەخش</span>: <span>4K Ultra HD</span></p>
+                    </div>
+                    <button id="favoriteBtn" class="settings-action-btn" style="margin-top: 15px;" onclick="toggleFavoriteCurrent()">
+                        <i class="fa-solid fa-heart"></i> <span id="favoriteBtnText">زیادکردن بۆ دڵخوازەکان</span>
+                    </button>
+                </div>
+                <div class="detail-right">
+                    <img id="detPoster" class="detail-poster" src="" alt="Poster">
+                </div>
+            </div>
+
+            <!-- بەشی سەیرکردن -->
+            <div class="player-box">
+                <h3 data-i18n="playerTitle">بەشی لێخوڕین و پەخشی ڕاستەوخۆی بینین</h3>
+                <div class="video-placeholder">
+                    <i class="fa-solid fa-play-circle" style="font-size: 60px; color: var(--primary-color);"></i>
+                    <span data-i18n="videoPlaceholderText">فیدۆ و پەخشی ڕاستەوخۆ لێرەوە دەست پێدەکات</span>
+                </div>
+            </div>
+
+            <div id="seriesSeasonsBox" class="player-box" style="display:none; margin-top: 20px;">
+                <h4 style="color: var(--primary-color); margin-bottom: 12px;" data-i18n="seasonsTitle">هەڵبژاردنی وەرزەکان:</h4>
+                <div class="seasons-container" id="seasonsList"></div>
+                
+                <h4 style="color: var(--primary-color); margin: 20px 0 12px 0;" data-i18n="episodesTitle">ئەڵقەکانی ئەم وەرچە:</h4>
+                <div class="episodes-container" id="episodesList"></div>
+            </div>
+        </div>
+
+        <div id="notifications" class="page-section">
+            <h2 class="section-title" data-i18n="notificationsMenu">ئاگادارکردنەوەکان</h2>
+            <div class="settings-group"><p style="color: var(--text-muted);" data-i18n="noNotifications">هیچ ئاگادارکردنەوەیەکی نوێ نییە لە ئێستادا.</p></div>
+        </div>
+
+        <!-- پڕۆفایل -->
+        <div id="profile" class="page-section">
+            <div class="content-box">
+                <h2 class="section-title" style="border:none; text-align:center; padding:0;" data-i18n="profile">پڕۆفایلی من</h2>
+                
+                <!-- مۆنیو یان دوو بەشی سەرەکی پێش چوونەژوورەوە -->
+                <div id="authSelectionView">
+                    <p style="color: var(--text-muted); margin: 15px 0 20px 0;" data-i18n="authPrompt">تکایە یەکێک لەم هەڵبژاردنانە دیاری بکە:</p>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button class="settings-action-btn" onclick="showLoginView()" style="width: 100%; padding: 12px;" data-i18n="loginTabBtn">چوونەژوورەوە (Log in)</button>
+                        <button class="settings-action-btn" onclick="showRegisterView()" style="width: 100%; padding: 12px; background-color: var(--primary-color); color: #fff;" data-i18n="registerTabBtn">دروستکردنی ئەکاونتی نوێ (Create new account)</button>
+                    </div>
+                </div>
+
+                <!-- بەشی لۆگ ئین (Log in) -->
+                <div id="loginView" style="display: none;">
+                    <button onclick="backToAuthSelection()" style="background:none; border:none; color:var(--primary-color); cursor:pointer; float:right; margin-bottom:10px;"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="backBtn">گەڕانەوە</span></button>
+                    <p style="color: var(--text-muted); margin: 15px 0 20px 0; clear:both;" data-i18n="loginPromptText">بۆ چوونەژوورەوە، ئەکاونتی پێشووت هەڵبژێرە:</p>
+                    <button class="google-btn" onclick="handleLoginGoogle()">
+                        <i class="fa-brands fa-google"></i> <span>Continue with Google</span>
+                    </button>
+                </div>
+
+                <!-- بەشی دروستکردنی ئەکاونتی نوێ (Create new account) -->
+                <div id="registerView" style="display: none;">
+                    <button onclick="backToAuthSelection()" style="background:none; border:none; color:var(--primary-color); cursor:pointer; float:right; margin-bottom:10px;"><i class="fa-solid fa-arrow-right"></i> <span data-i18n="backBtn">گەڕانەوە</span></button>
+                    <p style="color: var(--text-muted); margin: 15px 0 20px 0; clear:both;" data-i18n="registerPromptText">بۆ دروستکردنی ئەکاونتی نوێ، جیمێلەکەت ببەستەوە:</p>
+                    <button class="google-btn" onclick="handleRegisterGoogle()">
+                        <i class="fa-brands fa-google"></i> <span>Continue with Google</span>
+                    </button>
+                </div>
+
+                <!-- بەشی دوای چوونەژوورەوە -->
+                <div id="loggedInView" style="display: none;">
+                    <img id="userProfileImg" src="" alt="Profile" class="dev-avatar" style="margin: 15px auto;">
+                    <div id="userProfileName" class="dev-name" style="margin-bottom: 5px;"></div>
+                    <div id="userProfileEmail" style="color: var(--text-muted); font-size: 14px; margin-bottom: 5px;"></div>
+                    <div id="userProfileAge" style="color: var(--primary-color); font-size: 14px; font-weight: bold; margin-bottom: 20px;"></div>
+                    
+                    <h3 style="font-size: 16px; margin-bottom: 10px; color: var(--text-color);" data-i18n="favoritesTitle">فیلم و زنجیرە دڵخوازەکان:</h3>
+                    <div id="userFavoritesList" style="display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; margin-bottom: 20px; text-align: right; padding: 5px;"></div>
+
+                    <button class="settings-action-btn" onclick="googleLogout()" style="width: 100%;" data-i18n="logoutBtn">چوونەدەرەوە (Log out)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- مۆداڵی وەرگرتنی ناو و تەمەن بۆ ئەکاونتی نوێ -->
+        <div id="registerModal" class="custom-modal" style="display: none;">
+            <div class="modal-content">
+                <h3 style="color: var(--primary-color); margin-bottom: 15px;" data-i18n="completeProfileTitle">تکایە زانیارییەکانت تەواو بکە</h3>
+                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;" data-i18n="completeProfileDesc">چونکە ئەمە یەکەمجارەتە، پێویستە ناو و تەمەنت تۆمار بکەیت:</p>
+                <input type="text" id="regNameInput" placeholder="ناوی تەواو..." style="width:100%; padding:10px; margin-bottom:10px; background:var(--bg-dark); color:var(--text-color); border:1px solid #444; border-radius:8px;">
+                <input type="number" id="regAgeInput" placeholder="تەمەن..." style="width:100%; padding:10px; margin-bottom:15px; background:var(--bg-dark); color:var(--text-color); border:1px solid #444; border-radius:8px;">
+                <button class="settings-action-btn" style="width:100%; padding:10px;" onclick="saveNewUserRegistration()" data-i18n="saveBtn">تۆمارکردن</button>
+            </div>
+        </div>
+
+        <div id="developer" class="page-section">
+            <div class="content-box">
+                <img src="aizen.jpg" alt="Malik" class="dev-avatar" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80'">
+                <div class="dev-name">مالیک فیصل</div>
+                <div class="social-links">
+                    <a href="https://snapchat.com/add/malikfaisall123" target="_blank" class="social-item"><i class="fa-brands fa-snapchat"></i> <span>سناپچات: malikfaisall123</span></a>
+                    <a href="https://tiktok.com/@i7.3xq" target="_blank" class="social-item"><i class="fa-brands fa-tiktok"></i> <span>تیکتۆک: i7.3xq</span></a>
+                    <a href="https://discord.com/" target="_blank" class="social-item"><i class="fa-brands fa-discord"></i> <span>دیسکۆرد: i7.3xq</span></a>
+                </div>
+            </div>
+        </div>
+
+        <div id="settings" class="page-section">
+            <h2 class="section-title" data-i18n="settings">ڕێکخستنەکان</h2>
+            <div class="settings-group">
+                <div class="setting-item">
+                    <span data-i18n="selectLang">زمان (Language):</span>
+                    <select id="langSelect" onchange="changeLanguage(this.value)">
+                        <option value="ku">کوردی (Kurdish)</option>
+                        <option value="ar">العربية (Arabic)</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span data-i18n="darkMode">دۆخی تاریک (Dark Mode):</span>
+                    <input type="checkbox" id="darkModeToggle" checked onchange="toggleDarkMode(this)">
+                </div>
+                <div class="setting-item">
+                    <span data-i18n="qualityLabel">کوالێتی پەخش (Streaming Quality):</span>
+                    <select id="qualitySelect">
+                        <option value="auto">ئۆتۆماتیک (Auto)</option>
+                        <option value="4k">4K Ultra HD</option>
+                        <option value="1080p">1080p Full HD</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span data-i18n="notificationsLabel">ئاگادارکردنەوەکانی سیستم:</span>
+                    <input type="checkbox" id="notificationsToggle" checked>
+                </div>
+                <div class="setting-item">
+                    <span data-i18n="clearCacheLabel">پاککردنەوەی خەزنەی کاتی (Clear Cache):</span>
+                    <button class="settings-action-btn" onclick="clearAppCache()" data-i18n="clearBtn">پاککردنەوە</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div data-i18n="footerRights">هەموو مافێک پارێزراوە بۆ ماڵپەڕی KurdFrame © ٢٠٢٦</div>
+        <div class="footer-credit">بەڕێوەبردن لە لایەن مالیک فیصل</div>
+    </footer>
+
+    <!-- Firebase SDKs Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
