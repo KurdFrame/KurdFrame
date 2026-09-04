@@ -1,4 +1,3 @@
-// ڕێکخستنی فایەربەیس
 const firebaseConfig = {
   apiKey: "AIzaSyCRIeABo38myXZ23aMOb-FMK9K_MTgIxTY",
   authDomain: "kurd-frame.firebaseapp.com",
@@ -17,27 +16,19 @@ const db = firebase.firestore();
 const translations = {
     ku: {
         home: "سەرەکی", movies: "فلیمەکان", series: "زنجیرەکان", anime: "ئەنیمی",
-        profile: "پڕۆفایلی من / چوونەژوورەوە", developer: "دیڤلۆپەر",
-        settings: "ڕێکخستنەکان", notificationsMenu: "ئاگادارکردنەوەکان",
+        profile: "پڕۆفایلی من / چوونەژوورەوە", settings: "ڕێکخستنەکان",
         menuTitle: "لیستی سەرەکی", latestMovies: "دوایین فیلمە بڵاوکراوەکان",
         moviesTitle: "هەموو فلیمەکان", seriesTitle: "زنجیرە تەلەڤزیۆنییەکان", animeTitle: "ئەنیمییە بەناوبانگەکان",
-        searchPlaceholder: "گەڕان بەدوای فیلم، زنجیرە یان ئەنیمی...", searchBtn: "گەڕان",
-        watch: "بینین", playerTitle: "بەشی لێخوڕین و پەخشی ڕاستەوخۆی بینین",
-        videoPlaceholderText: "فیدۆ و پەخشی ڕاستەوخۆ لێرەوە دەست پێدەکات",
-        seasonsTitle: "هەڵبژاردنی وەرزەکان:", episodesTitle: "ئەڵقەکانی ئەم وەرچە:",
-        backBtn: "گەڕانەوە", imdbRating: "رێزبەندی IMDb", budget: "بودجە", revenue: "داهات",
-        year: "ساڵ", director: "دەرهێنەر", streamType: "جۆری پەخش",
-        noNotifications: "هیچ ئاگادارکردنەوەیەکی نوێ نییە لە ئێستادا.",
+        searchPlaceholder: "گەڕان بەدوای فیلم، زنجیرە یان ئەنیمی...",
+        watch: "بینین", backBtn: "گەڕانەوە",
         authPrompt: "تکایە یەکێک لەم هەڵبژاردنانە دیاری بکە:",
         loginTabBtn: "چوونەژوورەوە (Log in)",
         registerTabBtn: "دروستکردنی ئەکاونتی نوێ (Create new account)",
         loginPromptText: "بۆ چوونەژوورەوە، ئەکاونتی پێشووت هەڵبژێرە:",
         registerPromptText: "بۆ دروستکردنی ئەکاونتی نوێ، جیمێلەکەت ببەستەوە:",
         selectLang: "زمان (Language):", darkMode: "دۆخی تاریک (Dark Mode):",
-        qualityLabel: "کوالێتی پەخش (Streaming Quality):", notificationsLabel: "ئاگادارکردنەوەکانی سیستم:",
         clearCacheLabel: "پاککردنەوەی خەزنەی کاتی (Clear Cache):", clearBtn: "پاککردنەوە",
         cacheClearedAlert: "خەزنەی کاتی بە سەرکەوتوویی پاککرایەوە!",
-        footerRights: "هەموو مافێک پارێزراوە بۆ ماڵپەڕی KurdFrame © ٢٠٢٦",
         favoritesTitle: "فیلم، زنجیرە و ئەنیمییە دڵخوازەکان:", logoutBtn: "چوونەدەرەوە (Log out)",
         completeProfileTitle: "تکایە زانیارییەکانت تەواو بکە", 
         step1Desc: "هەنگاوی ١ لە ٢: ناوی خۆت بنووسە",
@@ -46,27 +37,19 @@ const translations = {
     },
     ar: {
         home: "الرئيسية", movies: "الأفلام", series: "المسلسلات", anime: "أنيمي",
-        profile: "الملف الشخصي / تسجيل الدخول", developer: "المطور",
-        settings: "الإعدادات", notificationsMenu: "الإشعارات",
+        profile: "الملف الشخصي / تسجيل الدخول", settings: "الإعدادات",
         menuTitle: "القائمة الرئيسية", latestMovies: "أحدث الأفلام المضافة",
         moviesTitle: "جميع الأفلام", seriesTitle: "المسلسلات التلفزيونية", animeTitle: "أشهر الأنميات",
-        searchPlaceholder: "ابحث عن فيلم، مسلسل أو أنيمي...", searchBtn: "بحث",
-        watch: "مشاهدة", playerTitle: "مشغل البث المباشر",
-        videoPlaceholderText: "يبدأ الفيديو والبث المباشر من هنا",
-        seasonsTitle: "اختر المواسم:", episodesTitle: "حلقات هذا الموسم:",
-        backBtn: "رجوع", imdbRating: "تقييم IMDb", budget: "الميزانية", revenue: "الإيرادات",
-        year: "السنة", director: "المخرج", streamType: "نوع البث",
-        noNotifications: "لا توجد إشعارات جديدة في الوقت الحالي.",
+        searchPlaceholder: "ابحث عن فيلم، مسلسل أو أنيمي...",
+        watch: "مشاهدة", backBtn: "رجوع",
         authPrompt: "يرجى اختيار أحد الخيارات التالية:",
         loginTabBtn: "تسجيل الدخول (Log in)",
         registerTabBtn: "إنشاء حساب جديد (Create new account)",
         loginPromptText: "لتسجيل الدخول، اختر حسابك السابق:",
         registerPromptText: "لإنشاء حساب جديد، اربط بريدك الإلكتروني:",
         selectLang: "اللغة (Language):", darkMode: "الوضع المظلم (Dark Mode):",
-        qualityLabel: "جودة البث (Streaming Quality):", notificationsLabel: "إشعارات النظام:",
         clearCacheLabel: "مسح ذاكرة التخزين المؤقت (Clear Cache):", clearBtn: "مسح",
         cacheClearedAlert: "تم مسح ذاكرة التخزين المؤقت بنجاح!",
-        footerRights: "جميع الحقوق محفوظة لموقع KurdFrame © ٢٠٢٦",
         favoritesTitle: "الأفلام، المسلسلات والأنيمي المفضلة:", logoutBtn: "تسجيل الخروج (Log out)",
         completeProfileTitle: "يرجى إكمال معلوماتك", 
         step1Desc: "الخطوة 1 من 2: أدخل اسمك",
@@ -75,27 +58,19 @@ const translations = {
     },
     en: {
         home: "Home", movies: "Movies", series: "Series", anime: "Anime",
-        profile: "My Profile / Login", developer: "Developer",
-        settings: "Settings", notificationsMenu: "Notifications",
+        profile: "My Profile / Login", settings: "Settings",
         menuTitle: "Main Menu", latestMovies: "Latest Released Movies",
         moviesTitle: "All Movies", seriesTitle: "TV Series", animeTitle: "Popular Anime",
-        searchPlaceholder: "Search for a movie, series or anime...", searchBtn: "Search",
-        watch: "Watch", playerTitle: "Live Streaming Player",
-        videoPlaceholderText: "Video and live streaming starts here",
-        seasonsTitle: "Select Seasons:", episodesTitle: "Episodes of this season:",
-        backBtn: "Back", imdbRating: "IMDb Rating", budget: "Budget", revenue: "Revenue",
-        year: "Year", director: "Director", streamType: "Stream Type",
-        noNotifications: "No new notifications right now.",
+        searchPlaceholder: "Search for a movie, series or anime...",
+        watch: "Watch", backBtn: "Back",
         authPrompt: "Please select one of the options below:",
         loginTabBtn: "Log in",
         registerTabBtn: "Create new account",
         loginPromptText: "To log in, select your existing account:",
         registerPromptText: "To create a new account, connect your Google account:",
         selectLang: "Language:", darkMode: "Dark Mode:",
-        qualityLabel: "Streaming Quality:", notificationsLabel: "System Notifications:",
         clearCacheLabel: "Clear Cache:", clearBtn: "Clear",
         cacheClearedAlert: "Cache cleared successfully!",
-        footerRights: "All rights reserved to KurdFrame © 2026",
         favoritesTitle: "Favorite Movies, Series & Anime:", logoutBtn: "Log out",
         completeProfileTitle: "Complete Your Profile", 
         step1Desc: "Step 1 of 2: Enter your name",
@@ -143,7 +118,6 @@ function renderMediaGrids() {
     const moviesGrid = document.getElementById('moviesGrid');
     const seriesGrid = document.getElementById('seriesGrid');
     const animeGrid = document.getElementById('animeGrid');
-
     if(!homeGrid) return;
 
     homeGrid.innerHTML = '';
@@ -158,7 +132,7 @@ function renderMediaGrids() {
                 <div class="movie-info">
                     <div class="movie-title">${item.title}</div>
                     <div class="movie-meta"><span>${item.year}</span><span>⭐ ${item.rating}</span></div>
-                    <button class="watch-btn" data-i18n="watch">بینین</button>
+                    <button class="watch-btn">بینین</button>
                 </div>
             </div>
         `;
@@ -172,11 +146,7 @@ function openMediaItem(id) {
     const item = allMediaItems.find(x => x.id === id);
     if (!item) return;
     currentActiveItem = item;
-    if (item.type === 'movie') {
-        openDetail(item.title, item.poster, item.rating, item.budget, item.revenue, item.year, item.director, item.desc);
-    } else {
-        openSeriesDetail(item.title, item.poster, item.rating, item.budget, item.revenue, item.year, item.director, item.desc);
-    }
+    openDetail(item.title, item.poster, item.rating, item.budget, item.revenue, item.year, item.director, item.desc);
     checkFavoriteStatus();
 }
 
@@ -241,12 +211,9 @@ function handleRegisterGoogle() {
             alert("ئەم ئەکاونتە پێشتر هەیە! ڕاستەوخۆ چوویە ژوورەوە.");
         } else {
             window.tempGoogleUser = user;
-            const step1 = document.getElementById('regStep1');
-            const step2 = document.getElementById('regStep2');
-            const modal = document.getElementById('registerModal');
-            if(step1) step1.style.display = 'block';
-            if(step2) step2.style.display = 'none';
-            if(modal) modal.style.display = 'flex';
+            document.getElementById('regStep1').style.display = 'block';
+            document.getElementById('regStep2').style.display = 'none';
+            document.getElementById('registerModal').style.display = 'flex';
         }
     }).catch((error) => {
         isLoggingIn = false;
@@ -262,15 +229,12 @@ function proceedToStep2() {
         return;
     }
     tempRegName = nameInput;
-    const step1 = document.getElementById('regStep1');
-    const step2 = document.getElementById('regStep2');
-    if(step1) step1.style.display = 'none';
-    if(step2) step2.style.display = 'block';
+    document.getElementById('regStep1').style.display = 'none';
+    document.getElementById('regStep2').style.display = 'block';
 }
 
 function saveNewUserRegistration() {
-    const birthDateInput = document.getElementById('regBirthDateInput');
-    const birthDate = birthDateInput ? birthDateInput.value : '';
+    const birthDate = document.getElementById('regBirthDateInput').value;
     if (!birthDate) {
         alert("تکایە بەرواری لەدایکبوونت دیاری بکە!");
         return;
@@ -288,8 +252,7 @@ function saveNewUserRegistration() {
 
     db.collection('users').doc(user.uid).set(userData).then(() => {
         currentUserData = userData;
-        const modal = document.getElementById('registerModal');
-        if(modal) modal.style.display = 'none';
+        document.getElementById('registerModal').style.display = 'none';
         updateProfileUI(user, userData);
         alert("ئەکاونتەکەت بە سەرکەوتوویی دروستکرا!");
     }).catch(error => {
@@ -298,34 +261,22 @@ function saveNewUserRegistration() {
 }
 
 function updateProfileUI(user, data) {
-    const authSel = document.getElementById('authSelectionView');
-    const loginV = document.getElementById('loginView');
-    const regV = document.getElementById('registerView');
-    const loggedV = document.getElementById('loggedInView');
+    document.getElementById('authSelectionView').style.display = 'none';
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('registerView').style.display = 'none';
+    document.getElementById('loggedInView').style.display = 'block';
 
-    if(authSel) authSel.style.display = 'none';
-    if(loginV) loginV.style.display = 'none';
-    if(regV) regV.style.display = 'none';
-    if(loggedV) loggedV.style.display = 'block';
-
-    const pImg = document.getElementById('userProfileImg');
-    const pName = document.getElementById('userProfileName');
-    const pEmail = document.getElementById('userProfileEmail');
-    const pAge = document.getElementById('userProfileAge');
-
-    if(pImg) pImg.src = data.photoURL || user.photoURL || '';
-    if(pName) pName.innerText = data.name || '';
-    if(pEmail) pEmail.innerText = "ئیمەیڵ: " + (data.email || user.email);
-    if(pAge) pAge.innerText = "بەرواری لەدایکبوون: " + (data.birthDate || '');
+    document.getElementById('userProfileImg').src = data.photoURL || user.photoURL || '';
+    document.getElementById('userProfileName').innerText = data.name || '';
+    document.getElementById('userProfileEmail').innerText = "ئیمەیڵ: " + (data.email || user.email);
+    document.getElementById('userProfileAge').innerText = "بەرواری لەدایکبوون: " + (data.birthDate || '');
 
     renderFavoritesList();
 }
 
 function resetProfileUI() {
-    const authSel = document.getElementById('authSelectionView');
-    const loggedV = document.getElementById('loggedInView');
-    if(authSel) authSel.style.display = 'block';
-    if(loggedV) loggedV.style.display = 'none';
+    document.getElementById('authSelectionView').style.display = 'block';
+    document.getElementById('loggedInView').style.display = 'none';
 }
 
 function renderFavoritesList() {
@@ -342,7 +293,7 @@ function renderFavoritesList() {
         const item = allMediaItems.find(x => x.id === favId);
         if (item) {
             favContainer.innerHTML += `
-                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-dark); padding:8px 12px; border-radius:6px; margin-bottom:5px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-main); padding:8px 12px; border-radius:6px; margin-bottom:5px;">
                     <span style="font-size:14px; cursor:pointer; color:var(--text-color);" onclick='openMediaItem("${item.id}")'>${item.title} (${item.type})</span>
                     <button onclick='removeFromFavorites("${item.id}")' style="background:none; border:none; color:red; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
                 </div>
@@ -421,35 +372,6 @@ function switchPage(pageId) {
     document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
     const targetPage = document.getElementById(pageId);
     if(targetPage) targetPage.classList.add('active-page');
-
-    const topNavBar = document.getElementById('topNavBar');
-    const btnHome = document.getElementById('btnHome');
-    const btnMovies = document.getElementById('btnMovies');
-    const btnSeries = document.getElementById('btnSeries');
-    const btnAnime = document.getElementById('btnAnime');
-    const headerSearchBtn = document.getElementById('headerSearchBtn');
-
-    if(topNavBar && btnHome && btnMovies && btnSeries && btnAnime && headerSearchBtn) {
-        topNavBar.classList.remove('active-nav');
-        btnHome.classList.remove('show-btn');
-        btnMovies.classList.remove('show-btn');
-        btnSeries.classList.remove('show-btn');
-        btnAnime.classList.remove('show-btn');
-
-        if (['home', 'movies', 'series', 'anime'].includes(pageId)) {
-            headerSearchBtn.style.display = 'flex';
-            topNavBar.classList.add('active-nav');
-            btnHome.classList.add('show-btn');
-            btnMovies.classList.add('show-btn');
-            btnSeries.classList.add('show-btn');
-            btnAnime.classList.add('show-btn');
-        } else {
-            headerSearchBtn.style.display = 'none';
-            const searchBox = document.getElementById('searchExpandBox');
-            if(searchBox) searchBox.classList.remove('active');
-        }
-    }
-
     const sidebar = document.getElementById('sidebar');
     if (sidebar && sidebar.style.right === '0px') toggleMenu();
     window.scrollTo(0, 0);
@@ -464,15 +386,7 @@ function openDetail(title, poster, rating, budget, revenue, year, director, desc
     document.getElementById('detYear').innerText = year;
     document.getElementById('detDirector').innerText = director;
     document.getElementById('detDesc').innerText = desc;
-    const seasonsBox = document.getElementById('seriesSeasonsBox');
-    if(seasonsBox) seasonsBox.style.display = 'none';
     switchPage('detailView');
-}
-
-function openSeriesDetail(title, poster, rating, budget, revenue, year, director, desc) {
-    openDetail(title, poster, rating, budget, revenue, year, director, desc);
-    const seasonsBox = document.getElementById('seriesSeasonsBox');
-    if(seasonsBox) seasonsBox.style.display = 'block';
 }
 
 function clearAppCache() {
