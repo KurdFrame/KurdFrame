@@ -1,3 +1,4 @@
+// ڕێکخستنی فایەربەیس
 const firebaseConfig = {
   apiKey: "AIzaSyCRIeABo38myXZ23aMOb-FMK9K_MTgIxTY",
   authDomain: "kurd-frame.firebaseapp.com",
@@ -13,6 +14,7 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
+// زمانەکان
 const translations = {
     ku: {
         home: "سەرەکی", movies: "فلیمەکان", series: "زنجیرەکان", anime: "ئەنیمی",
@@ -106,6 +108,7 @@ const allMediaItems = [
 
 let currentUserData = null;
 let currentActiveItem = null;
+let isLoggingIn = false;
 
 function initApp() { 
     switchPage('home'); 
@@ -114,11 +117,14 @@ function initApp() {
     firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
             const userDocRef = db.collection('users').doc(user.uid);
-            const docSnap = await userDocRef.get();
-
-            if (docSnap.exists) {
-                currentUserData = docSnap.data();
-                updateProfileUI(user, currentUserData);
+            try {
+                const docSnap = await userDocRef.get();
+                if (docSnap.exists) {
+                    currentUserData = docSnap.data();
+                    updateProfileUI(user, currentUserData);
+                }
+            } catch (e) {
+                console.log("Offline mode or sync issue");
             }
         } else {
             currentUserData = null;
@@ -132,6 +138,8 @@ function renderMediaGrids() {
     const moviesGrid = document.getElementById('moviesGrid');
     const seriesGrid = document.getElementById('seriesGrid');
     const animeGrid = document.getElementById('animeGrid');
+
+    if(!homeGrid) return;
 
     homeGrid.innerHTML = '';
     moviesGrid.innerHTML = '';
@@ -191,42 +199,80 @@ function backToAuthSelection() {
     document.getElementById('registerView').style.display = 'none';
 }
 
+// چوونەژوورەوەی گووگڵ بە پاراستن لە کێشەی پۆپ-ئەپ و ئۆفلاین
 function handleLoginGoogle() {
+    if (isLoggingIn) return;
+    isLoggingIn = true;
+
     const provider = new firebase.auth.GoogleAuthProvider();
+    
     firebase.auth().signInWithPopup(provider).then(async (result) => {
+        isLoggingIn = false;
         const user = result.user;
         const userDocRef = db.collection('users').doc(user.uid);
-        const docSnap = await userDocRef.get();
+        
+        try {
+            let docSnap;
+            try {
+                docSnap = await userDocRef.get({ source: 'server' });
+            } catch (e) {
+                docSnap = await userDocRef.get({ source: 'cache' });
+            }
 
-        if (!docSnap.exists) {
+            if (!docSnap.exists) {
+                await firebase.auth().signOut();
+                alert("ئەم ئەکاونتە بوونی نییە! تکایە سەرەتا لە بەشی دروستکردنی ئەکاونتی نوێ تۆمار بکە.");
+                backToAuthSelection();
+            } else {
+                currentUserData = docSnap.data();
+                updateProfileUI(user, currentUserData);
+            }
+        } catch (error) {
+            alert("کێشە لە پەیوەندیکردن بە سێرڤەرەوە هەیە.");
             await firebase.auth().signOut();
-            alert("ئەم ئەکاونتە بوونی نییە! تکایە سەرەتا لە بەشی دروستکردنی ئەکاونتی نوێ تۆمار بکە.");
             backToAuthSelection();
-        } else {
-            currentUserData = docSnap.data();
-            updateProfileUI(user, currentUserData);
         }
     }).catch((error) => {
+        isLoggingIn = false;
+        if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
+            return;
+        }
         alert("هەڵە لە چوونەژوورەوە: " + error.message);
     });
 }
 
+// تۆمارکردنی ئەکاونتی نوێ بە گووگڵ
 function handleRegisterGoogle() {
+    if (isLoggingIn) return;
+    isLoggingIn = true;
+
     const provider = new firebase.auth.GoogleAuthProvider();
+    
     firebase.auth().signInWithPopup(provider).then(async (result) => {
+        isLoggingIn = false;
         const user = result.user;
         const userDocRef = db.collection('users').doc(user.uid);
-        const docSnap = await userDocRef.get();
+        
+        try {
+            let docSnap = await userDocRef.get();
 
-        if (docSnap.exists) {
-            currentUserData = docSnap.data();
-            updateProfileUI(user, currentUserData);
-            alert("ئەم ئەکاونتە پێشتر هەبوو، ڕاستەوخۆ چوویە ژوورەوە!");
-        } else {
+            if (docSnap.exists) {
+                currentUserData = docSnap.data();
+                updateProfileUI(user, currentUserData);
+                alert("ئەم ئەکاونتە پێشتر هەبوو، ڕاستەوخۆ چوویە ژوورەوە!");
+            } else {
+                window.tempGoogleUser = user;
+                document.getElementById('registerModal').style.display = 'flex';
+            }
+        } catch (error) {
             window.tempGoogleUser = user;
             document.getElementById('registerModal').style.display = 'flex';
         }
     }).catch((error) => {
+        isLoggingIn = false;
+        if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
+            return;
+        }
         alert("هەڵە لە دروستکردنی ئەکاونت: " + error.message);
     });
 }
